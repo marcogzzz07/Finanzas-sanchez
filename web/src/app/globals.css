@@ -1,0 +1,134 @@
+/* Estilo neutro provisional. Se reemplaza cuando Marco entregue la referencia de UX/UI. */
+
+:root {
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --text: #1c1c1a;
+  --muted: #64645f;
+  --border: #dddcd6;
+  --accent: #2f5d50;
+  --accent-text: #ffffff;
+  --danger: #a3312a;
+  --warn-bg: #fff4d6;
+  --ok-bg: #e4f2e8;
+  --radius: 10px;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141413;
+    --surface: #1f1f1d;
+    --text: #ecebe6;
+    --muted: #a3a29b;
+    --border: #3a3a36;
+    --accent: #7fb8a5;
+    --accent-text: #10201b;
+    --danger: #f08a80;
+    --warn-bg: #3b3220;
+    --ok-bg: #1f3428;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+a { color: var(--accent); }
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 16px 96px;
+}
+
+h1 { font-size: 1.45rem; margin: 8px 0 16px; }
+h2 { font-size: 1.15rem; margin: 24px 0 8px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.stat { font-size: 1.6rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); font-size: 0.9rem; }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.stack > * + * { margin-top: 12px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+
+form.stack label, .field { display: block; font-weight: 550; }
+.field > span, form.stack label > span { display: block; margin-bottom: 4px; }
+
+input, select, textarea, button, .button {
+  font: inherit;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+input[type="checkbox"], input[type="radio"] { width: auto; min-height: 0; margin-right: 8px; }
+label.check { display: flex; align-items: center; font-weight: 400; }
+
+button, .button {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+button.secondary, .button.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+button.danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+button:disabled { opacity: 0.6; cursor: wait; }
+.actions > .button, .actions > button, .actions > form { width: auto; flex: 1 1 140px; }
+.actions > form > button { width: 100%; }
+
+.error { background: var(--warn-bg); border-left: 4px solid var(--danger); padding: 10px 12px; border-radius: 6px; }
+.notice { background: var(--ok-bg); padding: 10px 12px; border-radius: 6px; }
+.badge { display: inline-block; font-size: 0.8rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+.badge.warn { background: var(--warn-bg); color: var(--text); }
+
+ul.list { list-style: none; margin: 0; padding: 0; }
+ul.list > li { padding: 12px 0; border-bottom: 1px solid var(--border); }
+ul.list > li:last-child { border-bottom: none; }
+.strike { text-decoration: line-through; color: var(--muted); }
+
+details > summary { cursor: pointer; font-weight: 600; padding: 8px 0; }
+
+nav.tabs {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  display: flex; justify-content: space-around;
+  background: var(--surface); border-top: 1px solid var(--border);
+  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+  z-index: 10;
+}
+nav.tabs a {
+  flex: 1; text-align: center; font-size: 0.78rem; color: var(--muted);
+  text-decoration: none; padding: 8px 2px; border-radius: 8px;
+}
+nav.tabs a[aria-current="page"] { color: var(--accent); font-weight: 700; }
+
+header.top {
+  max-width: 640px; margin: 0 auto; padding: 12px 16px 0;
+  display: flex; justify-content: space-between; align-items: center;
+}
+header.top a { text-decoration: none; }
+
+.filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
