@@ -1,0 +1,94 @@
+/* Tokens del design system de referencia (Meta Design System), copiados sin cambios de valores.
+   La fuente Montserrat se carga con next/font en layout.tsx. */
+:root{
+/* Brand & accent */
+--meta-cobalt:#0064e0;--meta-cobalt-deep:#0457cb;--meta-cobalt-soft:#0091ff;--meta-cobalt-select:#0143b5;
+--meta-fb-blue:#1876f2;--meta-link-blue:#385898;--meta-oculus-purple:#a121ce;
+--meta-black:#000000;--meta-white:#ffffff;
+/* Neutrals */
+--meta-ink-deep:#0a1317;--meta-ink:#1c1e21;--meta-charcoal:#444950;--meta-slate:#4b4c4f;--meta-steel:#5d6c7b;--meta-stone:#8595a4;
+--meta-disabled:#bcc0c4;--meta-hairline:#ced0d4;--meta-hairline-soft:#dee3e9;--meta-cloud:#f1f4f7;
+/* Semantic raw */
+--meta-success:#31a24c;--meta-success-bg:#24e400;--meta-attention:#f2a918;--meta-warning:#f7b928;--meta-warning-bg:#ffe200;--meta-critical:#e41e3f;--meta-critical-strong:#f0284a;
+
+/* Semantic aliases — surfaces */
+--surface-canvas:var(--meta-white);--surface-soft:var(--meta-cloud);--surface-inverse:var(--meta-ink-deep);--surface-card:var(--meta-white);
+--surface-info-tint:rgba(0,145,255,0.15);--overlay-photo:rgba(10,19,23,0.12);--overlay-photo-strong:rgba(10,19,23,0.45);
+/* Text */
+--text-primary:var(--meta-ink-deep);--text-body:var(--meta-ink);--text-secondary:var(--meta-charcoal);--text-section:var(--meta-slate);
+--text-muted:var(--meta-steel);--text-subtle:var(--meta-stone);--text-disabled:var(--meta-disabled);--text-on-inverse:var(--meta-white);
+--text-link:var(--meta-ink-deep);--text-link-legacy:var(--meta-link-blue);--text-error:var(--meta-critical-strong);
+/* Borders */
+--border-default:var(--meta-hairline);--border-soft:var(--meta-hairline-soft);--border-ghost:rgba(10,19,23,0.12);--border-strong:var(--meta-ink-deep);
+--border-focus:var(--meta-fb-blue);--border-selected:var(--meta-cobalt-select);--border-error:var(--meta-critical-strong);
+/* Actions */
+--action-primary:var(--meta-black);--action-primary-pressed:var(--meta-charcoal);--action-on-primary:var(--meta-white);
+--action-buy:var(--meta-cobalt);--action-buy-pressed:var(--meta-cobalt-deep);--action-on-buy:var(--meta-white);
+--action-disabled:var(--meta-disabled);--control-active:var(--meta-fb-blue);
+/* Status */
+--status-success:var(--meta-success);--status-attention:var(--meta-attention);--status-warning:var(--meta-warning);--status-critical:var(--meta-critical);
+--accent-vr:var(--meta-oculus-purple);
+}
+:root{
+--font-sans:"Optimistic VF","Montserrat",Helvetica,Arial,"Noto Sans",sans-serif;
+--font-fine:Helvetica,Arial,sans-serif;
+--font-features-heading:"ss01","ss02"; /* @kind other */
+
+--fw-light:300; /* @kind font */
+--fw-regular:400; /* @kind font */
+--fw-medium:500; /* @kind font */
+--fw-bold:700; /* @kind font */
+
+--fs-hero:64px; /* @kind font */
+--lh-hero:1.16; /* @kind font */
+
+--fs-display:48px; /* @kind font */
+--lh-display:1.17; /* @kind font */
+
+--fs-heading-lg:36px; /* @kind font */
+--lh-heading-lg:1.28; /* @kind font */
+
+--fs-heading-md:28px; /* @kind font */
+--lh-heading-md:1.21; /* @kind font */
+
+--fs-heading-sm:24px; /* @kind font */
+--lh-heading-sm:1.25; /* @kind font */
+
+--fs-subtitle:18px; /* @kind font */
+--lh-subtitle:1.44; /* @kind font */
+
+--fs-body:16px; /* @kind font */
+--lh-body:1.5; /* @kind font */
+--ls-body:-0.16px; /* @kind font */
+
+--fs-body-sm:14px; /* @kind font */
+--lh-body-sm:1.43; /* @kind font */
+--ls-body-sm:-0.14px; /* @kind font */
+
+--fs-caption:12px; /* @kind font */
+--lh-caption:1.33; /* @kind font */
+
+}
+:root{
+--space-xxs:4px;--space-xs:8px;--space-sm:10px;--space-md:12px;--space-base:16px;--space-lg:20px;--space-xl:24px;--space-xxl:32px;--space-xxxl:40px;
+--space-section-sm:48px;--space-section:64px;--space-section-lg:80px;--space-hero:120px;
+--radius-xs:2px;--radius-sm:4px;--radius-md:6px;--radius-lg:8px;--radius-xl:16px;--radius-xxl:24px;--radius-xxxl:32px;--radius-feature:40px;--radius-full:100px;--radius-circle:9999px;
+--container-max:1280px;--gutter:32px;--gutter-wide:48px;--nav-height:64px;--control-height:44px;--icon-button:40px;--swatch:32px;
+--bp-sm:480px; /* @kind other */
+--bp-md:768px; /* @kind other */
+--bp-lg:1024px; /* @kind other */
+--bp-xl:1360px; /* @kind other */
+
+}
+:root{
+--shadow-flat:none;
+--shadow-tab:rgba(0,0,0,0.2) 1px 1px 0px 0px;
+--shadow-panel:rgba(20,22,26,0.3) 0px 1px 4px 0px;
+--ease-out:cubic-bezier(0.2,0,0,1); /* @kind other */
+--ease-in-out:cubic-bezier(0.4,0,0.2,1); /* @kind other */
+
+--dur-fast:150ms; /* @kind other */
+--dur-base:250ms; /* @kind other */
+--dur-accordion:300ms; /* @kind other */
+
+}

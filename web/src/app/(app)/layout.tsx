@@ -8,10 +8,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <>
       <header className="top">
-        <strong>Finanzas familiares</strong>
-        <Link href="/configuracion" className="muted">
-          {profile.full_name || "Mi perfil"} · {ROLES[profile.role]}
-        </Link>
+        <div>
+          <strong>Finanzas familiares</strong>
+          <Link href="/configuracion" className="muted">
+            {profile.full_name || "Mi perfil"} · {ROLES[profile.role]}
+          </Link>
+        </div>
       </header>
       {children}
       <Tabs />

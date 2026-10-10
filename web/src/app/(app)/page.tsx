@@ -31,7 +31,7 @@ export default async function HomePage() {
     <main>
       <h1>Inicio</h1>
 
-      <section className="card">
+      <section className="card soft">
         <div className="muted">Dinero registrado para pagos</div>
         <div className="stat">{formatCents(liquidity)}</div>
         <div className="muted">

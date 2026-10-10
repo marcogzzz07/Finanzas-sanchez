@@ -60,11 +60,11 @@ export function TxForm({
       {state.error && <p className="error">{state.error}</p>}
       {initial.id && <input type="hidden" name="id" value={initial.id} />}
 
-      <fieldset className="field" style={{ border: "none", padding: 0, margin: 0 }}>
-        <span>Tipo de operación</span>
-        <div className="actions" style={{ margin: 0 }}>
+      <fieldset>
+        <legend>Tipo de operación</legend>
+        <div className="pills" role="radiogroup">
           {allowed.map((k) => (
-            <label key={k} className="check card" style={{ margin: 0, flex: "1 1 120px" }}>
+            <label key={k}>
               <input type="radio" name="kind" value={k} checked={effectiveKind === k} onChange={() => setKind(k)} />
               {TX_KINDS[k]}
             </label>

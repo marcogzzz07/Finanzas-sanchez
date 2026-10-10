@@ -60,7 +60,7 @@ export default async function AccountPage({
       </p>
       {guardado && <p className="notice">Guardado.</p>}
 
-      <section className="card">
+      <section className="card soft">
         <div className="muted">
           {ACCOUNT_TYPES[account.type]}
           {b.institution_name ? ` · ${b.institution_name}` : ""}
