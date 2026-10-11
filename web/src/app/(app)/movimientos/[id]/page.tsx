@@ -4,6 +4,7 @@ import { formatDate, getBalances, getCatalogs, getProfileNames, type Transaction
 import { TX_KINDS } from "@/lib/labels";
 import { formatCents } from "@/lib/money";
 import { requireMember } from "@/lib/session";
+import { UploadDocument } from "@/components/UploadDocument";
 import { TxForm } from "../TxForm";
 import { VoidForm } from "./VoidForm";
 
@@ -20,10 +21,13 @@ export default async function TransactionPage({
   const { data: tx } = await supabase.from("transactions").select("*").eq("id", id).maybeSingle<Transaction>();
   if (!tx) notFound();
 
-  const [balances, catalogs, people] = await Promise.all([
+  const [balances, catalogs, people, receipts, payment, settings] = await Promise.all([
     getBalances(supabase),
     getCatalogs(supabase),
     getProfileNames(supabase),
+    supabase.from("documents").select("id, file_name, archived").eq("transaction_id", id).order("created_at"),
+    supabase.from("payment_occurrences").select("id, concept, due_date").eq("transaction_id", id).maybeSingle(),
+    supabase.from("family_settings").select("max_upload_mb").eq("id", 1).single(),
   ]);
   const names = Object.fromEntries(balances.map((b) => [b.account_id, b.name]));
   const category = catalogs.categories.find((c) => c.id === tx.category_id);
@@ -57,12 +61,39 @@ export default async function TransactionPage({
           {tx.updated_at !== tx.created_at && ` · Último cambio: ${people[tx.updated_by ?? ""] ?? "—"} el ${formatDate(tx.updated_at)}`}
         </p>
         {voided && <p className="error">Anulado: {tx.void_reason}</p>}
+        {payment.data && (
+          <p>
+            Salda el pago <Link href={`/pagos/${payment.data.id}`}>{payment.data.concept}</Link> del {formatDate(payment.data.due_date)}.
+          </p>
+        )}
+      </section>
+
+      <h2>Comprobantes</h2>
+      <section className="card stack">
+        {(receipts.data ?? []).length === 0 ? (
+          <p className="muted">Sin comprobantes.</p>
+        ) : (
+          <ul className="list">
+            {(receipts.data ?? []).map((d) => (
+              <li key={d.id} className="row">
+                <Link href={`/documentos/${d.id}`} className={d.archived ? "strike" : undefined}>{d.file_name}</Link>
+                <a href={`/documentos/${d.id}/descargar`}>Descargar</a>
+              </li>
+            ))}
+          </ul>
+        )}
+        {canWrite && (
+          <details>
+            <summary>Adjuntar comprobante</summary>
+            <UploadDocument accounts={[]} maxMb={Number(settings.data?.max_upload_mb ?? 10)} defaultKind="receipt" transactionId={tx.id} compact />
+          </details>
+        )}
       </section>
 
       {canWrite && !voided && (
         <>
           <h2>Editar</h2>
-          <div className="card">
+          <div className="card form-narrow">
             <TxForm
               initial={tx}
               accounts={accountOptions}
@@ -73,7 +104,7 @@ export default async function TransactionPage({
           </div>
           <h2>Anular</h2>
           <div className="card">
-            <VoidForm id={tx.id} />
+            <VoidForm id={tx.id} paymentConcept={payment.data?.concept} />
           </div>
         </>
       )}

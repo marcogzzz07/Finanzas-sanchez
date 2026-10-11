@@ -8,20 +8,20 @@ Implementación del MVP descrito en `../product-spec-finanzas-familiares.md`. Ne
 | --- | --- |
 | 1. Base: Auth, roles, accesos, catálogos editables, RLS | Hecho. Probado en base local. |
 | 2. Dinero: cuentas, movimientos, traspasos, devoluciones, saldos, cambio de tipo | Hecho. Probado en base local. |
-| 3. Pagos pendientes y recurrentes | Pendiente |
-| 4. Documentos y revisión de saldo | Pendiente (la tabla `balance_reviews` ya existe) |
+| 3. Pagos pendientes y recurrentes, agenda y calendario mensual | Hecho. Reglas probadas en base local; migración aplicada en Supabase. |
+| 4. Documentos privados y revisión de saldo | Hecho. Probado en base local; bucket privado creado en Supabase. |
 | 5. Bandeja de estados de cuenta con lectura automática | Pendiente |
 | 6. Avisos por correo y puesta en uso | Pendiente |
 
-Todavía no se ha conectado a un proyecto real de Supabase ni se ha desplegado. Las pantallas no se han probado contra Supabase; las reglas de base de datos sí, en Postgres local.
+Conectado al proyecto de Supabase `Finanzas-sanchez` (migraciones aplicadas). No desplegado en Vercel todavía. Las reglas de base de datos están probadas en Postgres local.
 
-El estilo visual es neutro y provisional hasta recibir la referencia de UX/UI.
+Diseño tipo dashboard con sidebar verde plegable (referencia enviada por Marco el 11 oct 2026).
 
 ## Estructura
 
 - `supabase/migrations/`: esquema, reglas de dinero, permisos (RLS) y ejemplos iniciales editables.
 - `src/app/(auth)`: entrar, recuperar contraseña, crear contraseña desde invitación.
-- `src/app/(app)`: Inicio, Movimientos, Cuentas, Configuración; Pagos, Documentos y Bandeja como próximos incrementos.
+- `src/app/(app)`: Inicio, Movimientos, Pagos, Calendario, Cuentas, Documentos y Configuración; Bandeja como próximo incremento.
 - `src/lib/money.ts`: dinero en centavos enteros, sin punto flotante.
 - `tests/db/`: pruebas de reglas de dinero, flexibilidad y acceso contra un Postgres local que imita a Supabase.
 

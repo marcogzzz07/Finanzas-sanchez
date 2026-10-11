@@ -31,3 +31,5 @@ export function balanceLabel(type: AccountType, cents: number): string {
 export function kindsForAccount(type: AccountType): TxKind[] {
   return type === "credit" ? ["expense", "refund"] : ["expense", "income", "transfer", "refund"];
 }
+
+export const DOC_KINDS: Record<string, string> = { statement: "Estado de cuenta", receipt: "Comprobante", other: "Otro" };

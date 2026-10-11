@@ -47,7 +47,7 @@ Tecnología decidida por Marco: Supabase, despliegue en Vercel e implementación
 - Proponer Bancrea inicialmente como inversión, con tipo editable; sin rendimientos diarios ni valuación de mercado.
 - Alertas dentro de la aplicación y correo electrónico: canal confirmado por Marco durante la planificación. WhatsApp queda fuera del MVP.
 - Acceso por persona con tres roles simples. La propuesta inicial permite consultar todo el espacio familiar; validar ese nivel de visibilidad antes de cargar información real.
-- Calendario sencillo mediante una agenda agrupada por fecha. La cuadrícula mensual puede esperar.
+- Calendario: agenda agrupada por fecha en Pagos y, por pedido de Marco (11 oct 2026), un módulo Calendario con cuadrícula mensual en el sidebar, desde donde se pueden agregar pagos.
 - Conciliación inicial mediante comparación manual de saldos, sin motor de coincidencia automática.
 - Tesorería inicial mediante saldos registrados y lista de próximos pagos; sin pronósticos financieros.
 - Mantener pequeño el número de funciones, con configuración editable desde la interfaz. No requerir cambios de código, nuevas migraciones ni acceso al panel de Supabase para administrar los datos cotidianos.

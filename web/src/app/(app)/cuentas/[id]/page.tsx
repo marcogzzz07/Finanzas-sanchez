@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { formatDate, getBalances, getCatalogs } from "@/lib/data";
+import { formatDate, getBalances, getCatalogs, getProfileNames, today } from "@/lib/data";
 import { ACCOUNT_TYPES, balanceLabel, type AccountType } from "@/lib/labels";
 import { formatCents } from "@/lib/money";
 import { requireMember } from "@/lib/session";
+import { Reviews, type Review } from "./Reviews";
 import { AccountForm, ArchiveForm, DeleteForm, TypeChangeForm, type AccountInitial, type Incompatible } from "../AccountForms";
 
 type Preview = {
@@ -34,12 +35,26 @@ export default async function AccountPage({
     .maybeSingle<AccountInitial & { id: string; type: AccountType; archived: boolean }>();
   if (!account) notFound();
 
-  const [balances, catalogs, refs, pendingTx] = await Promise.all([
+  const [balances, catalogs, refs, pendingTx, reviewsRes, docsRes, people] = await Promise.all([
     getBalances(supabase),
     getCatalogs(supabase),
     supabase.rpc("reference_count", { p_catalog: "accounts", p_id: id }),
     supabase.from("transactions").select("id", { count: "exact", head: true }).eq("status", "active").or(`account_id.eq.${id},to_account_id.eq.${id}`),
+    supabase.from("balance_reviews").select("*").eq("account_id", id).order("cutoff_date", { ascending: false }),
+    supabase.from("documents").select("id, file_name, cutoff_date").eq("account_id", id).eq("archived", false).order("created_at", { ascending: false }),
+    getProfileNames(supabase),
   ]);
+  const reviews = (reviewsRes.data ?? []) as Review[];
+  // Para revisiones desactualizadas, el saldo registrado actual a esa fecha.
+  const currentAtCutoff: Record<string, number> = {};
+  await Promise.all(
+    reviews
+      .filter((r) => r.stale)
+      .map(async (r) => {
+        const { data } = await supabase.rpc("account_balance", { p_account: id, p_as_of: r.cutoff_date });
+        currentAtCutoff[r.id] = Number(data ?? 0);
+      }),
+  );
   const b = balances.find((x) => x.account_id === id)!;
   const refCount = Number(refs.data ?? 0);
 
@@ -86,10 +101,24 @@ export default async function AccountPage({
         </p>
       </section>
 
+      <h2>Revisión de saldo</h2>
+      <section className="card">
+        <Reviews
+          accountId={id}
+          isCredit={account.type === "credit"}
+          reviews={reviews}
+          documents={(docsRes.data ?? []).map((d) => ({ id: d.id, name: d.cutoff_date ? `${d.file_name} · corte ${formatDate(d.cutoff_date)}` : d.file_name }))}
+          people={people}
+          canWrite={canWrite}
+          today={today()}
+          currentAtCutoff={currentAtCutoff}
+        />
+      </section>
+
       {canWrite && (
         <>
           <h2>Editar</h2>
-          <div className="card">
+          <div className="card form-narrow">
             <AccountForm
               initial={account}
               institutions={catalogs.institutions.filter((i) => !i.archived || i.id === account.institution_id)}

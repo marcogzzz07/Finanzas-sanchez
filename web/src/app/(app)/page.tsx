@@ -4,6 +4,7 @@ import { BarChart } from "@/components/BarChart";
 import { formatDate, getBalances, today } from "@/lib/data";
 import { ACCOUNT_TYPES, balanceLabel, TX_KINDS, type TxKind } from "@/lib/labels";
 import { formatCents } from "@/lib/money";
+import { addDays, ensureOccurrences, OCCURRENCE_FIELDS, statusLabel, type Occurrence } from "@/lib/payments";
 import { requireMember } from "@/lib/session";
 
 const MONTHS = 6;
@@ -31,10 +32,12 @@ function change(current: number, previous: number) {
 
 export default async function HomePage() {
   const { supabase, canWrite, profile } = await requireMember();
-  const thisMonth = monthKey(today());
+  const todayIso = today();
+  const thisMonth = monthKey(todayIso);
+  await ensureOccurrences(supabase);
   const firstMonth = shiftMonth(thisMonth, -(MONTHS - 1));
 
-  const [balances, history, recent] = await Promise.all([
+  const [balances, history, recent, due, peopleRes] = await Promise.all([
     getBalances(supabase),
     supabase
       .from("transactions")
@@ -49,7 +52,18 @@ export default async function HomePage() {
       .order("effective_date", { ascending: false })
       .order("created_at", { ascending: false })
       .limit(6),
+    supabase
+      .from("payment_occurrences")
+      .select(OCCURRENCE_FIELDS)
+      .eq("status", "pending")
+      .lte("due_date", addDays(todayIso, 7))
+      .order("due_date"),
+    supabase.from("responsible_people").select("id, name"),
   ]);
+  const upcoming = (due.data ?? []) as Occurrence[];
+  const personName = Object.fromEntries((peopleRes.data ?? []).map((p) => [p.id, p.name]));
+  const upcomingKnown = upcoming.reduce((s, o) => s + Number(o.expected_cents ?? 0), 0);
+  const upcomingUnknown = upcoming.filter((o) => o.expected_cents === null).length;
 
   // Ingresos y gastos (netos de devoluciones) por mes; traspasos excluidos.
   const months = Array.from({ length: MONTHS }, (_, i) => shiftMonth(firstMonth, i));
@@ -242,11 +256,42 @@ export default async function HomePage() {
         <div className="card">
           <div className="card-head">
             <h3>Por pagar</h3>
+            <Link href="/pagos" className="muted">Ver pagos</Link>
           </div>
-          <p className="muted">
-            Aquí aparecerán los pagos vencidos, de hoy y de los próximos siete días, con su responsable. Se habilita con el
-            módulo de Pagos.
-          </p>
+          <div className="row" style={{ marginBottom: 12 }}>
+            <span className="label">Vencidos, hoy y próximos 7 días</span>
+            <span className="num">{formatCents(upcomingKnown)}</span>
+          </div>
+          {upcomingUnknown > 0 && (
+            <p className="badge warn">{upcomingUnknown} con importe por confirmar (no se suman)</p>
+          )}
+          {upcoming.length === 0 ? (
+            <p className="muted">Nada pendiente en los próximos 7 días.</p>
+          ) : (
+            <ul className="list">
+              {upcoming.slice(0, 8).map((o) => {
+                const st = statusLabel(o, todayIso);
+                return (
+                  <li key={o.id}>
+                    <Link href={`/pagos/${o.id}`} className="row">
+                      <span>
+                        <strong>{o.concept}</strong>
+                        <br />
+                        <span className="muted">
+                          {formatDate(o.due_date)} · {personName[o.responsible_id ?? ""] ?? "Sin responsable"}
+                        </span>
+                      </span>
+                      <span style={{ textAlign: "right" }}>
+                        <span className="num">{o.expected_cents ? formatCents(o.expected_cents) : "Por confirmar"}</span>
+                        <br />
+                        <span className={`badge ${st.tone}`}>{st.text}</span>
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </section>
     </main>

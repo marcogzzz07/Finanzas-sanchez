@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Permite compilar en otra carpeta sin interrumpir el servidor de desarrollo (NEXT_DIST_DIR=.next-build).
+  distDir: process.env.NEXT_DIST_DIR || ".next",
 };
 
 export default nextConfig;
