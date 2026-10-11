@@ -13,8 +13,12 @@ export default async function NewTransactionPage({ searchParams }: { searchParam
 
   return (
     <main>
-      <h1>Registrar {TX_KINDS[kind].toLowerCase()}</h1>
-      <div className="card">
+      <header className="pagehead">
+        <div>
+          <h1>Registrar {TX_KINDS[kind].toLowerCase()}</h1>
+        </div>
+      </header>
+      <div className="card form-narrow">
         <TxForm
           initial={{ kind, effective_date: today() }}
           accounts={balances.filter((b) => !b.archived).map((b) => ({ id: b.account_id, name: b.name, type: b.type }))}

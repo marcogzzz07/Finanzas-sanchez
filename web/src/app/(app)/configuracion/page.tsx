@@ -68,7 +68,12 @@ export default async function SettingsPage() {
 
   return (
     <main>
-      <h1>Configuración</h1>
+      <header className="pagehead">
+        <div>
+          <h1>Configuración</h1>
+          <p>Catálogos, usuarios y avisos.</p>
+        </div>
+      </header>
 
       <h2>Mi perfil</h2>
       <div className="card">

@@ -1,3 +1,4 @@
+import { Plus } from "lucide-react";
 import Link from "next/link";
 import { formatDate, getBalances, today } from "@/lib/data";
 import { TX_KINDS, type TxKind } from "@/lib/labels";
@@ -30,14 +31,21 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
 
   return (
     <main>
-      <h1>Movimientos</h1>
-      {canWrite && (
-        <div className="actions">
-          <Link className="button" href="/movimientos/nuevo?tipo=expense">Registrar gasto</Link>
-          <Link className="button secondary" href="/movimientos/nuevo?tipo=income">Registrar ingreso</Link>
-          <Link className="button secondary" href="/movimientos/nuevo?tipo=transfer">Traspaso</Link>
+      <header className="pagehead">
+        <div>
+          <h1>Movimientos</h1>
+          <p>Ingresos, gastos, traspasos y devoluciones registrados.</p>
         </div>
-      )}
+        {canWrite && (
+          <div className="actions">
+            <Link className="button secondary" href="/movimientos/nuevo?tipo=transfer">Traspaso</Link>
+            <Link className="button secondary" href="/movimientos/nuevo?tipo=income">Ingreso</Link>
+            <Link className="button" href="/movimientos/nuevo?tipo=expense">
+              <Plus size={16} aria-hidden /> Registrar gasto
+            </Link>
+          </div>
+        )}
+      </header>
 
       <form className="card filters" method="get">
         <label className="field">
@@ -80,24 +88,41 @@ export default async function TransactionsPage({ searchParams }: { searchParams:
             {canWrite && <Link href="/movimientos/nuevo?tipo=expense">Registra el primero</Link>}
           </p>
         ) : (
-          <ul className="list">
-            {(rows ?? []).map((t) => (
-              <li key={t.id}>
-                <Link href={`/movimientos/${t.id}`} className="row" style={{ textDecoration: "none", color: "inherit" }}>
-                  <span className={t.status === "voided" ? "strike" : undefined}>
-                    {t.concept}
-                    <br />
-                    <span className="muted">
-                      {TX_KINDS[t.kind as TxKind]} · {formatDate(t.effective_date)} · {names[t.account_id]}
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Concepto</th>
+                <th className="hide-sm">Cuenta</th>
+                <th className="num">Importe</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(rows ?? []).map((t) => {
+                const voided = t.status === "voided";
+                return (
+                  <tr key={t.id}>
+                    <td className="muted">{formatDate(t.effective_date)}</td>
+                    <td>
+                      <Link href={`/movimientos/${t.id}`} className={voided ? "strike" : undefined}>
+                        {t.concept}
+                      </Link>
+                      {voided && <span className="badge critical" style={{ marginLeft: 8 }}>Anulado</span>}
+                      <span className="sub">{TX_KINDS[t.kind as TxKind]}</span>
+                    </td>
+                    <td className="hide-sm">
+                      {names[t.account_id]}
                       {t.to_account_id ? ` → ${names[t.to_account_id]}` : ""}
-                      {t.status === "voided" ? " · Anulado" : ""}
-                    </span>
-                  </span>
-                  <span className="num">{formatCents(t.amount_cents)}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                    </td>
+                    <td className={`num ${voided ? "strike" : ""}`}>
+                      {t.kind === "expense" ? "−" : t.kind === "income" || t.kind === "refund" ? "+" : ""}
+                      {formatCents(t.amount_cents)}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
       </section>
     </main>

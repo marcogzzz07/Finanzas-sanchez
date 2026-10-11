@@ -9,8 +9,12 @@ export default async function NewAccountPage() {
   const { institutions, people } = await getCatalogs(supabase);
   return (
     <main>
-      <h1>Agregar cuenta</h1>
-      <div className="card">
+      <header className="pagehead">
+        <div>
+          <h1>Agregar cuenta</h1>
+        </div>
+      </header>
+      <div className="card form-narrow">
         <AccountForm
           initial={{}}
           institutions={institutions.filter((i) => !i.archived)}

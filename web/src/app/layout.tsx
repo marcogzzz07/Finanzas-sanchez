@@ -1,12 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-// Sustituto documentado por el design system para su fuente propietaria.
-const montserrat = Montserrat({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: "--font-montserrat",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -16,11 +14,11 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0e4a42" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-MX" className={montserrat.variable}>
+    <html lang="es-MX" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

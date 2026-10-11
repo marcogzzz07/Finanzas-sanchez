@@ -40,13 +40,17 @@ export default async function AccountsPage() {
 
   return (
     <main>
-      <h1>Cuentas</h1>
-      <p className="muted">Saldos según registros. La app no consulta al banco.</p>
-      {canWrite && (
-        <div className="actions">
-          <Link className="button" href="/cuentas/nueva">Agregar cuenta</Link>
+      <header className="pagehead">
+        <div>
+          <h1>Cuentas</h1>
+          <p>Saldos según registros. La app no consulta al banco.</p>
         </div>
-      )}
+        {canWrite && (
+          <div className="actions">
+            <Link className="button" href="/cuentas/nueva">Agregar cuenta</Link>
+          </div>
+        )}
+      </header>
       <section className="card">
         {active.length === 0 ? <p>No hay cuentas activas.</p> : <ul className="list">{active.map(item)}</ul>}
       </section>
