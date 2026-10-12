@@ -82,3 +82,11 @@ npm run dev
 - Los ejemplos iniciales (Banorte, Banorte crédito, Bancrea, Efectivo; Alicia, Ana, Adriana; categorías) son filas editables, no valores en el código.
 - Las cuentas empiezan sin fecha ni saldo de arranque; se completan con el primer estado de cuenta (incremento 5) o a mano.
 - Roles y usuarios finales pendientes de confirmar con la familia.
+
+## Nota: carpeta sincronizada con iCloud
+
+El proyecto vive en el Escritorio, que iCloud sincroniza. Si iCloud saca archivos del disco, `next dev` se queda esperando. Por eso `node_modules` y `.next` son enlaces a `node_modules.nosync` y `.next.nosync` (iCloud ignora lo que termina en `.nosync`). Para reinstalar:
+
+```bash
+rm -rf node_modules node_modules.nosync && mkdir node_modules.nosync && npm install && mv node_modules/* node_modules/.[!.]* node_modules.nosync/ 2>/dev/null; rmdir node_modules; ln -s node_modules.nosync node_modules
+```
