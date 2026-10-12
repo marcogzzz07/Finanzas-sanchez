@@ -85,8 +85,10 @@ npm run dev
 
 ## Nota: carpeta sincronizada con iCloud
 
-El proyecto vive en el Escritorio, que iCloud sincroniza. Si iCloud saca archivos del disco, `next dev` se queda esperando. Por eso `node_modules` y `.next` son enlaces a `node_modules.nosync` y `.next.nosync` (iCloud ignora lo que termina en `.nosync`). Para reinstalar:
+El proyecto vive en el Escritorio, que iCloud sincroniza y a veces vacía o borra. Por eso `node_modules` y `.next` son enlaces a `~/.finanzas-sanchez/` (fuera de iCloud), y `npm run dev` usa webpack porque Turbopack no acepta dependencias fuera de la carpeta del proyecto. Para reinstalar:
 
 ```bash
-rm -rf node_modules node_modules.nosync && mkdir node_modules.nosync && npm install && mv node_modules/* node_modules/.[!.]* node_modules.nosync/ 2>/dev/null; rmdir node_modules; ln -s node_modules.nosync node_modules
+rm -f node_modules && npm install && rm -rf ~/.finanzas-sanchez/node_modules && mv node_modules ~/.finanzas-sanchez/node_modules && ln -s ~/.finanzas-sanchez/node_modules node_modules
 ```
+
+La solución definitiva es mover la carpeta del proyecto fuera del Escritorio (por ejemplo, a `~/Proyectos`).
